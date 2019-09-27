@@ -1,0 +1,73 @@
+VERTICES = 11
+tournaments = digraphs.tournaments_nauty(VERTICES,VERTICES // 2,VERTICES // 2)
+
+
+main()
+
+
+def main():
+    for g in tournaments:
+        matrix = g.adjacency_matrix()
+        print matrix
+        print "\n"
+        print getBipartiteCliques(matrix)
+        print "\n \n \n"
+
+
+
+def test():
+    graph = 0
+    for g in tournaments:
+        graph = g
+    print g
+    matrix = g.adjacency_matrix()
+    print getBipartiteCliques(matrix)
+
+
+
+
+############################################## Clique Finding
+
+def getBipartiteCliques(matrix):
+    R = matrix.nrows()
+    bicliqueList = []
+    for i in range(2, VERTICES //2 + 1):
+        for combination in Combinations(range(R), i).list():
+            clique = getBipartiteClique(matrix, combination)
+            if clique != []:
+                bicliqueList.append(clique)
+    return bicliqueList
+
+
+def getBipartiteClique(matrix, sourceList):
+    clique = []
+    for i in range(matrix.ncols()):
+        addVertex = true
+        for source in sourceList:
+            if(matrix[source,i] == 0):
+                addVertex = false
+        if(addVertex):
+            for source in sourceList:
+                clique.append([source,i])
+    return clique
+
+
+
+############################################# Matrix Opperations
+
+def matrixMultiply(matrix1, matrix2):
+    results = matrix1 * matrix2
+    for i in range(VERTICES):
+        for j in range(VERTICES):
+            if(results[i,j] > 1):
+                results[i,j] = 1
+    return results
+    
+    
+def addMultiply(matrix1, matrix2): #This can be sped up...
+    results = matrix1 + matrix2
+    for i in range(VERTICES):
+        for j in range(VERTICES):
+            if(results[i,j] > 1):
+                results[i,j] = 1
+    return results
